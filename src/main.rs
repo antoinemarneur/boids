@@ -15,7 +15,12 @@ fn model(app: &App) -> Model {
     let mut boids = Vec::with_capacity(BOIDS);
 
     for _n in 0..BOIDS {
-        boids.push(Boid::new((random_f32() - 0.5) * 800.0, (random_f32() - 0.5) * 600.0, 5.0));
+        boids.push(
+            Boid::new(
+                Vec2::new((random_f32() - 0.5) * 800.0, (random_f32() - 0.5) * 600.0), 
+                Vec2::new(5.0,5.0)
+            )
+        );
     }
 
     app.new_window().size(1000, 700).view(view).build().unwrap();
@@ -32,7 +37,7 @@ fn update(app: &App, model: &mut Model, _update: Update) {
         let cohesion = model.boids[i].cohesion(&model.boids);
         
         model.boids[i].check_border(boundary);
-        model.boids[i].update(sep.0 + align.0 + cohesion.0, sep.1 + align.1 + cohesion.1);
+        model.boids[i].update(sep + align + cohesion);
     }
 }
 
