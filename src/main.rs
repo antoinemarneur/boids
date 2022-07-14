@@ -1,34 +1,38 @@
 use nannou::prelude::*;
+use boids::Boid;
+
+const BOIDS: usize = 20;
 
 fn main() {
     nannou::app(model).update(update).run();
 }
 
 struct Model {
-    _window: window::Id,
-    x: f32,
-    y: f32,
-    dx: f32,
-    dy: f32,
+    boids : Vec<Boid>,
 }
 
 fn model(app: &App) -> Model {
-    let _window = app.new_window().view(view).build().unwrap();
-    Model { _window, x: random_f32() , y: random_f32(), dx: 3.0, dy: 3.0 }
+    let mut boids = Vec::with_capacity(BOIDS);
+
+    for _n in 0..BOIDS {
+        boids.push(Boid::new((random_f32() - 0.5) * 800.0, (random_f32() - 0.5) * 600.0, 5.0));
+    }
+
+    app.new_window().size(1000, 700).view(view).build().unwrap();
+
+    Model { boids }
 }
 
 fn update(app: &App, model: &mut Model, _update: Update) {
-    model.x += model.dx;
-    model.y += model.dy;
-
     let boundary = app.window_rect();
 
-    if model.x < boundary.left() || model.x > boundary.right() {
-        model.dx *= -1.0;
-    }
-
-    if model.y < boundary.bottom() || model.y > boundary.top() {
-        model.dy *= -1.0;
+    for i in 0..BOIDS {
+        let sep = model.boids[i].separation(&model.boids);
+        let align = model.boids[i].alignment(&model.boids);
+        let cohesion = model.boids[i].cohesion(&model.boids);
+        
+        model.boids[i].check_border(boundary);
+        model.boids[i].update(sep.0 + align.0 + cohesion.0, sep.1 + align.1 + cohesion.1);
     }
 }
 
@@ -36,6 +40,10 @@ fn view(app: &App, model: &Model, frame: Frame) {
     let draw = app.draw();
 
     draw.background().color(GREY);
-    draw.tri().color(STEELBLUE).w(30.0).h(30.0).rotate(vec2(model.dx, model.dy).angle()).x_y(model.x, model.y);
+
+    for boid in model.boids.iter() {
+        boid.draw(&draw);
+    }
+
     draw.to_frame(app, &frame).unwrap();
 }
