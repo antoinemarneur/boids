@@ -6,7 +6,7 @@ Small project using the Boids Algorithm to simulate birds flocking.
 
 - [Background](#background)
 - [Install](#install)
-- [Usage](#usage)
+- [Demo](#demo)
 - [Maintainers](#maintainers)
 - [License](#license)
 
@@ -25,7 +25,7 @@ The Boids Algorithm is composed of 3 principles:
 
 This project is only available through *git clone* for the moment.
 
-## Usage
+## Demo
 
 https://user-images.githubusercontent.com/45307851/179075687-394ee5d9-1920-4a94-b1f1-52a5d2d907d9.mov
 
