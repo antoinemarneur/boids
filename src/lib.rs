@@ -37,7 +37,7 @@ impl Boid {
         self.position += self.velocity;
     }
 
-    // Regulate the speed of every boid to behave boids like real animals.
+    // Regulate the speed of every boid to behave like real animals.
     fn speed_limit(&mut self) {
         let speed_limit = SPEED_LIMIT;
 
